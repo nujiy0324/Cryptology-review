@@ -244,3 +244,10 @@
 
 ## ECC 椭圆曲线（Elliptic Curve）算法
 
+参考 [ECC椭圆曲线加密算法：介绍](https://zhuanlan.zhihu.com/p/36326221)
+
+*今时今日，我们可以在TLS（Transport Layer Security安全传输层协议）,PGP（Pretty Good Privacy基于RSA的邮件加密系统）和SSH（Secure Shell安全外壳协议）中找到椭圆曲线加密系统，这是三项构建了现代Web和IT世界的重要技术，更不用提比特币和其他数字货币加密技术了。*
+
+椭圆曲线可以定义为所有满足方程$E:\ y^2 = x^3+ax+b$的点$(x,y)$所构成的集合
+
+<img src="..\Cryptology-review\pic\image-20200829191443890.png" alt="image-20200829191443890" style="zoom:50%;" />
