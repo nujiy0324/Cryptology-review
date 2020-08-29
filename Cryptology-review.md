@@ -16,13 +16,13 @@
 
 ## 数学基础
 
-1. 逆元（inverse）
+逆元（inverse）
 
-   1. 加法模逆元：若a+b≡0 (mod n), 则称a是b的加法模n逆元，b是a的加法模n逆元
+1. 加法模逆元：若a+b≡0 (mod n), 则称a是b的加法模n逆元，b是a的加法模n逆元
 
-   2. 乘法模逆元：若a*b≡1 (mod n)，则称a是b的乘法模逆元，b是a的乘法模n逆元。a的乘法逆元记作a-1
+2. 乘法模逆元：若a*b≡1 (mod n)，则称a是b的乘法模逆元，b是a的乘法模n逆元。a的乘法逆元记作a-1
 
-      <img src="..\Cryptology-review\pic\image-20200824130104573.png" alt="image-20200824130104573" style="zoom:50%;" />
+   <img src="..\Cryptology-review\pic\image-20200824130104573.png" alt="image-20200824130104573" style="zoom:50%;" />
 
 ## 散列
 
@@ -104,7 +104,7 @@
 
      **详细代码参看[信息摘要算法之二：SHA1算法分析及实现](https://www.cnblogs.com/foxclever/p/8282366.html)**
 
-     
+## 分组密码工作模式与流密码
 
 
 
