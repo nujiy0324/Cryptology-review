@@ -106,5 +106,117 @@
 
 ## 分组密码工作模式与流密码
 
+1. 分组密码工作模式
 
+   分组加密（block cipher）即为将明文分成多个等长的模块，使用确定的算法和对称密钥对每组分别加密
+
+   常见的分组密码算法分组长度和密钥长度如下，填充方式暂略，具体可以参考[分组密码工作模式](http://www.beesfun.com/2017/03/06/分组密码工作模式/)，且本文也是参考该篇blog
+
+   <img src="..\Cryptology-review\pic\image-20200829141745995.png" alt="image-20200829141745995" style="zoom: 67%;" />
+
+   1. 电子密码簿（ECB，Electronic CodeBook mode）
+
+      ECB 将需要加密的明文按照块密码的块大小分为若干块，并对每个块独立进行加密
+
+      <img src="..\Cryptology-review\pic\clip_image002.jpg" alt="img" style="zoom:50%;" />
+
+      原理清晰明了，明文与密文一一对应。优点是简单，可并行。缺点显而易见，容易被攻击
+
+   2. 密文块链接模式（CBC，Cipher Block Chaining mode）
+
+      CBC模式加密，先将明文分组与前一个密文分组(或为初始化向量IV)进行XOR运算，然后再进行加密
+
+      解密，密文分组先进行解密，然后再进行xor运算得到明文分组
+
+      <img src="..\Cryptology-review\pic\clip_image001.jpg" alt="img" style="zoom:50%;" />
+
+      加密是不能并行的，但是解密可以并行计算
+
+   3. 密文反馈模式（CFB，Cipher FeedBack mode）
+
+      CFB模式可以看做是一种使用分组密码来实现流密码的方式, CFB模式中由密码算法所生成的比特序列称为密钥流（key stream）。在CFB模式中，密码算法就相当于用来生成密钥流的伪随机数生成器，而初始化向量就相当于伪随机数生成器的“种子”， 它的明文数据可以被逐比特加密
+
+      <img src="..\Cryptology-review\pic\clip_image003.jpg" alt="img" style="zoom:50%;" />
+
+      <img src="..\Cryptology-review\pic\image-20200829144312790.png" alt="image-20200829144312790" style="zoom:60%;" />
+
+2. 流密码算法RC4（Rivest Cipher 4）
+
+   流密码，Stream Cipher，对称加密算法（eg. DES）
+
+   RC4算法密钥长度可变（1-256byte）
+
+   * 关键变量
+
+     * 密钥流：RC4算法根据明文和密钥生成相应的密钥流，长度和明文长度对应。C~i~=P~i~  Xor  KS~i~
+
+       *KS即为密钥流*
+
+     * 状态向量S，长度256 byte
+
+     * 临时向量，256 byte
+
+     * 密钥K，与plaintext的长度，密钥流的长度**没有**必然联系
+
+   * 算法步骤
+
+     1. 初始化密钥，根据输入的秘钥key，使用密钥调度算法（KSA）生成一个256字节的sbox
+     2. 再通过伪随机数生成算法（PRGA）得到密钥流（keystream）
+     3. 加密：密钥流与明文进行异或运算得到密文
+     4. 解密：秘文与密钥流进行异或运算得到明文
+
+   ```c
+   #include <stdio.h>
+   #include <string.h>
+   #include <stdlib.h>
+   
+   void swap(unsigned char *a, unsigned char *b) {
+     unsigned char t = *a;
+     *a = *b;
+     *b = t;
+   }
+   
+   void rc4KSA(unsigned char *s, const unsigned char *key, int len) {
+       for (int i = 0; i < 256; i++) s[i] = i;
+       int j = 0;
+       for (int i = 0; i < 256; i++ ) {
+           j = (j + s[i] + *(key + i % len)) % 256;
+           swap(s + i, s + j);
+       }
+   }
+   
+   void rc4PRGA(unsigned char *s, char *data, size_t len) {
+       int i = 0;
+       int j = 0;
+       for ( size_t idx = 0; idx < len; idx++ ) {
+           i = (i + 1) % 256;
+           j = (j + s[i]) % 256;
+           swap(s + i, s + j);
+           unsigned char k = s[(s[i] + s[j]) % 256];
+           data[idx] ^= k;  // k是伪随机数，和明文进行XOR进行加密
+       }
+   }
+   
+   int main(int argc, const char * argv[]) {
+     unsigned char s[256]; // S-box
+     unsigned char key[128]; // key的长度1到256字节，本例子使用128字节
+     arc4random_buf((unsigned char *)key, sizeof(key)); // 用伪随机数算法生成key
+     char data[1000] = "这里是要机密的数据";
+   
+     // 加密
+     rc4KSA(s, key, sizeof(key));
+     rc4PRGA(s, data, strlen(data));
+   
+     // 解密
+     rc4KSA(s, key, sizeof(key));
+     rc4PRGA(s, data, strlen(data));
+     return 0;
+   }
+   ```
+
+## DES & AES
+
+
+
+## RSA
 
