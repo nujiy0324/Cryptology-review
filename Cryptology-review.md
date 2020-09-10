@@ -269,3 +269,7 @@
 椭圆曲线可以定义为所有满足方程$E:\ y^2 = x^3+ax+b$的点$(x,y)$所构成的集合
 
 <img src="..\Cryptology-review\pic\image-20200829191443890.png" alt="image-20200829191443890" style="zoom:50%;" />
+
+
+
+凉了
